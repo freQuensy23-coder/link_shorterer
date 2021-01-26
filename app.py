@@ -20,10 +20,11 @@ host = "127.0.0.1:5000/"
 
 @app.route("/add")
 def add_new_short_link():
-    """"""
+    """Add new short link to db"""
     data = request.args.to_dict()
     redirect_to = data["to"]
     link = "s/" + DB.add_new_short_link(redirect_to=redirect_to)
+    log.info(f"Add new short link {link}")
     return f"""You'r link is <a href = "{link}">{host + link}</a>"""
 
 
@@ -34,11 +35,13 @@ def use_short(path):
     log.debug("Link: " + link)
     link_to_redirect = urljoin("https:", link)
     log.debug(link_to_redirect)
+    log.info(f'Using short link now {path} -> {link_to_redirect}')
     return redirect(link_to_redirect, code=302)
 
 
 @app.route("/")
 def main():
+    log.info("Get main page")
     return """
             <input></input><button>Shorten</button>
             <script>
